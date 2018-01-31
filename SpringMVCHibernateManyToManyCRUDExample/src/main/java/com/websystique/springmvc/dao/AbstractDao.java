@@ -1,13 +1,10 @@
 package com.websystique.springmvc.dao;
  
 import java.io.Serializable;
- 
 import java.lang.reflect.ParameterizedType;
  
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
  
 public abstract class AbstractDao<PK extends Serializable, T> {
      
@@ -18,32 +15,27 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         this.persistentClass =(Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
      
-    @Autowired
-    private SessionFactory sessionFactory;
- 
-    protected Session getSession(){
-        return sessionFactory.getCurrentSession();
+    @PersistenceContext
+    EntityManager entityManager;
+     
+    protected EntityManager getEntityManager(){
+        return this.entityManager;
     }
  
-    @SuppressWarnings("unchecked")
-    public T getByKey(PK key) {
-        return (T) getSession().get(persistentClass, key);
+    protected T getByKey(PK key) {
+        return (T) entityManager.find(persistentClass, key);
     }
  
-    public void persist(T entity) {
-        getSession().persist(entity);
-    }
- 
-    public void update(T entity) {
-        getSession().update(entity);
-    }
- 
-    public void delete(T entity) {
-        getSession().delete(entity);
+    protected void persist(T entity) {
+        entityManager.persist(entity);
     }
      
-    protected Criteria createEntityCriteria(){
-        return getSession().createCriteria(persistentClass);
+    protected void update(T entity) {
+        entityManager.merge(entity);
+    }
+ 
+    protected void delete(T entity) {
+        entityManager.remove(entity);
     }
  
 }
