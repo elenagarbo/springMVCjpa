@@ -1,5 +1,6 @@
 package com.websystique.springmvc.model;
  
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
  
@@ -18,7 +19,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  
 @Entity
 @Table(name="APP_USER")
-public class User {
+public class User implements Serializable{
  
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -137,6 +138,10 @@ public class User {
         return true;
     }
  
+    /*
+     * DO-NOT-INCLUDE passwords in toString function.
+     * It is done here just for convenience purpose.
+     */
     @Override
     public String toString() {
         return "User [id=" + id + ", ssoId=" + ssoId + ", password=" + password
@@ -144,4 +149,6 @@ public class User {
                 + ", email=" + email + "]";
     }
  
+ 
+     
 }

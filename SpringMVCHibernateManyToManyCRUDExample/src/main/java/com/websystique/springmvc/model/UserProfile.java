@@ -1,5 +1,7 @@
 package com.websystique.springmvc.model;
  
+import java.io.Serializable;
+ 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,7 @@ import javax.persistence.Table;
  
 @Entity
 @Table(name="USER_PROFILE")
-public class UserProfile {
+public class UserProfile implements Serializable{
  
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id; 
@@ -68,5 +70,8 @@ public class UserProfile {
     public String toString() {
         return "UserProfile [id=" + id + ", type=" + type + "]";
     }
+ 
+ 
+ 
  
 }
